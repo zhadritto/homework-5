@@ -11,7 +11,7 @@ public class FireRuneDecorator extends ActionDecorator {
 
     @Override
     public int getDamage() {
-        // Fire rune adds a flat 15 damage
+
         return super.getDamage() + 15;
     }
 

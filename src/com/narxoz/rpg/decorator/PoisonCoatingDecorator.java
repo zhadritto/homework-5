@@ -12,7 +12,6 @@ public class PoisonCoatingDecorator extends ActionDecorator {
 
     @Override
     public int getDamage() {
-        // Poison adds a flat 5 damage
         return super.getDamage() + 5;
     }
 
