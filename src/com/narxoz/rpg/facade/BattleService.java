@@ -15,23 +15,39 @@ public class BattleService {
     }
 
     public AdventureResult battle(HeroProfile hero, BossEnemy boss, AttackAction action) {
-        // TODO: Implement the battle flow.
-        // Questions to answer:
-        // - Who attacks first?
-        // - How many rounds are allowed?
-        // - How is damage resolved?
-        // - How will randomness affect the result, if at all?
         AdventureResult result = new AdventureResult();
-        result.setWinner("TODO");
-        result.setRounds(0);
-        result.setReward("TODO");
-        result.addLine("TODO: implement battle logic");
+        int rounds = 0;
 
-        // Keep the field in use so students can decide whether to rely on it.
-        if (random.nextInt(1) == 0) {
-            // TODO: Replace placeholder branch with real deterministic or random logic.
+        result.addLine("--- BATTLE START ---");
+
+        while (hero.isAlive() && boss.isAlive() && rounds < 50) {
+            rounds++;
+            result.addLine("\n[Round " + rounds + "]");
+            int heroDamage = action.getDamage();
+            if (random.nextInt(5) == 0) {
+                result.addLine(hero.getName() + " missed their attack!");
+            } else {
+                boss.takeDamage(heroDamage);
+                result.addLine(hero.getName() + " uses " + action.getActionName() + " and deals " + heroDamage + " damage. " + boss.getName() + " HP: " + boss.getHealth());
+            }
+
+            if (!boss.isAlive()) break;
+            int bossDamage = boss.getAttackPower();
+            hero.takeDamage(bossDamage);
+            result.addLine(boss.getName() + " strikes back for " + bossDamage + " damage. " + hero.getName() + " HP: " + hero.getHealth());
         }
 
+        result.setRounds(rounds);
+
+        if (hero.isAlive() && !boss.isAlive()) {
+            result.setWinner(hero.getName());
+        } else if (!hero.isAlive() && boss.isAlive()) {
+            result.setWinner(boss.getName());
+        } else {
+            result.setWinner("Draw (Timeout or Mutual Defeat)");
+        }
+
+        result.addLine("--- BATTLE END ---");
         return result;
     }
 }
